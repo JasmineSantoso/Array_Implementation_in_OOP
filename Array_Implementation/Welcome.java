@@ -1,84 +1,83 @@
+import java.util.Scanner;
+
 public class Welcome {
     public static void main(String[] args) {
-        Bank[] bank = new Bank[2];
-        
-        bank[0].addCustomer("Alum", "Kai");
-        bank[0].addCustomer("Biba", "Meng");
-        bank[1].addCustomer("Chiko", "Chuck");
+        Scanner input = new Scanner(System.in);
+        Bank bank = new Bank();
 
-        Customer customerA = bank[0].getCustomer(0);
-        Customer customerB = bank[0].getCustomer(1);
-        Customer customerC = bank[1].getCustomer(0);
+        System.out.print("Masukkan nama depan: ");
+        String firstName = input.nextLine();
+        System.out.print("Masukkan nama belakang: ");
+        String lastName = input.nextLine();
 
-        Account acc1 = new Account(500000);
-        Account acc2 = new Account(450000);
-        Account acc3 = new Account(870000);
-        Account acc4 = new Account(730000);
+        bank.addCustomer(firstName, lastName);
+        Customer customer = bank.getCustomer(0);
 
-        customerA.addAccount(acc1);
-        customerA.addAccount(acc4);
-        customerB.addAccount(acc2);
-        customerC.addAccount(acc3);
+        System.out.print("Masukkan saldo awal: ");
+        double initialBalance = input.nextDouble();
+        Account account = new Account(initialBalance);
 
+        customer.addAccount(account);
+        int choice;
+        do {
+            System.out.println();
+            System.out.println("=================================");
+            System.out.println("          BANK ABC MENU");
+            System.out.println("=================================");
+            System.out.println("Customer : " + customer);
+            System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Lihat Balance");
+            System.out.println("4. Exit");
+            System.out.println("=================================");
+            System.out.print("Pilih menu: ");
+            choice = input.nextInt();
+            
+            switch (choice) {
+                case 1:
+                    System.out.print("Masukkan jumlah deposit: ");
+                    double depositAmount = input.nextDouble();
 
-        System.out.println("Customer: " + customerA);
-        System.out.println(
-            "Jumlah Account: " + customerA.getNumOfAccounts()
-        );
+                    if (account.deposit(depositAmount)) {
+                        System.out.println("Deposit berhasil!");
+                        System.out.println("Balance sekarang: " + account.getBalance());
+                    } else {
+                        System.out.println("Deposit gagal! Jumlah harus lebih dari 0.");
+                    }
+                    break;
 
-        System.out.println(
-            "Account 1 Balance: "
-            + customerA.getAccount(0).getBalance()
-        );
-        acc1.deposit(1500);
-        System.out.println(
-            "Account 1 Balance after Deposit: "
-            + customerA.getAccount(0).getBalance()
-        );
+                case 2:
+                    System.out.print("Masukkan jumlah withdraw: ");
+                    double withdrawAmount = input.nextDouble();
 
-        System.out.println(
-            "Account 2 Balance: "
-            + customerA.getAccount(1).getBalance()
-        );
-        acc4.withdraw(4900);
-        System.out.println(
-            "Account 2 Balance after Withdraw: "
-            + customerA.getAccount(1).getBalance()
-        );
+                    if (account.withdraw(withdrawAmount)) {
+                        System.out.println("Withdraw berhasil!");
+                        System.out.println("Balance sekarang: " + account.getBalance());
+                    } else {
+                        System.out.println("Withdraw gagal! Saldo tidak mencukupi.");
+                    }
+                    break;
 
-        System.out.println("-------------------------------");
-        System.out.println("Customer: " + customerB);
-        System.out.println(
-            "Jumlah Account: " + customerB.getNumOfAccounts()
-        );
+                case 3:
+                    System.out.println();
+                    System.out.println("---------- ACCOUNT ----------");
+                    System.out.println("Customer : " + customer);
+                    System.out.println("Balance  : " + account.getBalance());
+                    System.out.println("-----------------------------");
+                    break;
 
-        System.out.println(
-            "Account 1 Balance: "
-            + customerB.getAccount(0).getBalance()
-        );
-        acc2.withdraw(500);
+                case 4:
+                    System.out.println();
+                    System.out.println("Terima kasih telah menggunakan Bank ABC.");
+                    System.out.println("Program selesai.");
+                    break;
 
-        System.out.println(
-            "Account 1 Balance after Withdraw: "
-            + customerB.getAccount(0).getBalance()
-        );
+                default:
+                    System.out.println("Pilihan tidak tersedia. Silakan pilih 1-4.");
+            }
 
-        System.out.println("-------------------------------");
-        System.out.println("Customer: " + customerC);
-        System.out.println(
-            "Jumlah Account: " + customerC.getNumOfAccounts()
-        );
-
-        System.out.println(
-            "Account 1 Balance: "
-            + customerC.getAccount(0).getBalance()
-        );
-        acc3.deposit(1000);
-
-        System.out.println(
-            "Account 1 Balance after Withdraw: "
-            + customerC.getAccount(0).getBalance()
-        );
+        } while (choice != 4);
+        input.close();
 
     }
 }
